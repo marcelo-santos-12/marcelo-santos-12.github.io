@@ -19,6 +19,7 @@ function App() {
   const [days, setDays] = useState(0);
   const [code, setCode] = useState('');
   const [authorized, setAuthorized] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   const correctCode = '12052014'; // <- Defina aqui o "código de acesso"
 
@@ -40,8 +41,6 @@ function App() {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
-
-  const [playing, setPlaying] = useState(false);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -105,7 +104,7 @@ function App() {
           >
           {playing ? 'Pausar música' : 'Tocar música'}
         </button>
-        <audio ref={audioRef} src="/romantic-song.mp3" loop />
+        <audio ref={audioRef} src="music/romantic-song.mp3" loop />
       </div>
 
       <div className="w-full h-full">
