@@ -17,21 +17,12 @@ const images = [
 function App() {
   const [current, setCurrent] = useState(0);
   const [days, setDays] = useState(0);
+  const [code, setCode] = useState('');
+  const [authorized, setAuthorized] = useState(false);
+
+  const correctCode = '12052014'; // <- Defina aqui o "código de acesso"
 
   const audioRef = useRef<HTMLAudioElement>(null);
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.play().catch(() => {
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const startDate = new Date("2014-05-12");
@@ -41,6 +32,13 @@ function App() {
     const diffTime = today.getTime() - startDate.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     setDays(diffDays);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const [playing, setPlaying] = useState(false);
@@ -59,6 +57,35 @@ function App() {
     }
   };
 
+  // 🔐 Verificação do código de acesso
+  if (!authorized) {
+    return (
+      <div className='flex h-screen w-screen items-center justify-center bg-pink-50'>
+
+      <div className="flex flex-col items-center justify-center p-4">
+        <h2 className="text-2xl font-bold text-pink-600 mb-4">Acesso restrito</h2>
+        <input
+          type="password"
+          placeholder="Digite o código de acesso"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          className="border border-pink-300 rounded px-4 py-2 mb-4"
+          />
+        <button
+          onClick={() => setAuthorized(code === correctCode)}
+          className="bg-pink-500 text-white px-4 py-2 rounded"
+          >
+          Entrar
+        </button>
+        {code && code !== correctCode && (
+          <p className="text-red-500 mt-2">Código incorreto 😢</p>
+        )}
+      </div>
+        </div>
+    );
+  }
+
+  // ✅ Conteúdo liberado após o código correto:
   return (
     <div className="flex flex-col items-center justify-center px-4 py-8 min-h-screen bg-pink-50 text-center">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-pink-700 mb-4">
@@ -71,19 +98,16 @@ function App() {
       </p>
 
       <div className="text-center p-4">
-      <h1 className="text-2xl font-bold">Somente pra você 💖</h1>
+        <h1 className="text-2xl font-bold">Somente pra você 💖</h1>
+        <button
+          onClick={togglePlay}
+          className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+        >
+          {playing ? 'Pausar música' : 'Tocar música'}
+        </button>
+        <audio ref={audioRef} src="/romantic-song.mp3" loop />
+      </div>
 
-      <button
-        onClick={togglePlay}
-        className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
-      >
-        {playing ? 'Pausar música' : 'Tocar música'}
-      </button>
-
-      <audio ref={audioRef} src="/romantic-song.mp3" loop />
-    </div>
-
-      <audio ref={audioRef} src="music/music-song.mp3" loop />
       <div className="w-full h-full">
         <img
           src={images[current]}
