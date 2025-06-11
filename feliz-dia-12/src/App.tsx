@@ -1,17 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const images = [
-  '/fotos/img1.jpg',
-  '/fotos/img2.jpg',
-  '/fotos/img3.jpg'
+  'imgs/image01.jpeg',
+  'imgs/image02.jpeg',
+  'imgs/image03.jpeg',
+  'imgs/image04.jpeg',
+  'imgs/image05.jpeg',
+  'imgs/image06.jpeg',
+  'imgs/image07.jpeg',
+  'imgs/image08.jpeg',
+  'imgs/image09.jpeg',
+  'imgs/image10.jpeg',
+  'imgs/image11.jpeg',
 ];
 
 function App() {
   const [current, setCurrent] = useState(0);
   const [days, setDays] = useState(0);
 
+  const audioRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
-    // Slideshow
+    if (audioRef.current) {
+      audioRef.current.play().catch(() => {
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 3000);
@@ -19,50 +34,67 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Contador de dias
-    const startDate = new Date("2013-06-12");
+    const startDate = new Date("2014-05-12");
     const today = new Date();
-    // const diffTime = Math.abs(today - startDate);
-    // setDays(Math.floor(diffTime / (1000 * 60 * 60 * 24)));
-    setDays(1000);
+    startDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    const diffTime = today.getTime() - startDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    setDays(diffDays);
   }, []);
 
+  const [playing, setPlaying] = useState(false);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (playing) {
+      audio.pause();
+      setPlaying(false);
+    } else {
+      audio.play().then(() => setPlaying(true)).catch((err) => {
+        console.error("Falha ao tocar áudio:", err);
+      });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-pink-50 text-gray-800 font-poppins flex items-center justify-center p-6">
-      <div className="max-w-xl w-full space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold font-playfair">Bem vinda, Bruna Oliveira!</h1>
-          <p className="text-lg leading-relaxed">
-            Onze anos juntos, compartilhando sorrisos, sonhos e desafios que só fortaleceram o que construímos...
-            cada momento ao seu lado é uma parte preciosa da minha história...
-          </p>
-        </div>
+    <div className="flex flex-col items-center justify-center px-4 py-8 min-h-screen bg-pink-50 text-center">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-pink-700 mb-4">
+        Bem-vinda, Bruna Oliveira!
+      </h1>
 
-        <div className="w-full h-56 rounded-xl overflow-hidden shadow-md">
-          <img
-            src={images[current]}
-            alt="slideshow"
-            className="w-full h-full object-cover transition-all duration-500"
-          />
-        </div>
+      <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-6 max-w-xl">
+        Onze anos juntos, compartilhando sorrisos, sonhos e desafios que só fortaleceram o que construímos...
+        cada momento ao seu lado é uma parte preciosa da minha história...
+      </p>
 
-        <div className="text-center space-y-4">
-          <p className="text-lg leading-relaxed">
-            ...e eu mal posso esperar para viver todos os próximos capítulos, de mãos dadas, descobrindo novos caminhos,
-            com o mesmo amor e carinho que sempre nos uniu.
-          </p>
-          <div className="text-pink-600 font-semibold text-lg">
-            São {days} dias juntos 💖
-          </div>
-        </div>
+      <div className="text-center p-4">
+      <h1 className="text-2xl font-bold">Somente pra você 💖</h1>
 
-        <div className="flex justify-center">
-          <div className="relative w-12 h-12 bg-red-500 rotate-[-45deg] animate-pulse">
-            <div className="absolute top-[-50%] left-0 w-12 h-12 bg-red-500 rounded-full"></div>
-            <div className="absolute top-0 left-[50%] w-12 h-12 bg-red-500 rounded-full"></div>
-          </div>
-        </div>
+      <button
+        onClick={togglePlay}
+        className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+      >
+        {playing ? 'Pausar música' : 'Tocar música'}
+      </button>
+
+      <audio ref={audioRef} src="/romantic-song.mp3" loop />
+    </div>
+
+      <audio ref={audioRef} src="music/music-song.mp3" loop />
+      <div className="w-full h-full">
+        <img
+          src={images[current]}
+          alt="slideshow"
+        />
       </div>
+
+      <span className="text-base sm:text-lg md:text-xl text-gray-800 max-w-xl">
+        ...e eu mal posso esperar para viver todos os próximos capítulos, de mãos dadas, descobrindo novos caminhos,
+        com o mesmo amor e carinho que sempre nos uniu. São <strong>{days}</strong> dias juntos 💖
+      </span>
     </div>
   );
 }
