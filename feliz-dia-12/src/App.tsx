@@ -102,7 +102,7 @@ function App() {
         <button
           onClick={togglePlay}
           className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
-        >
+          >
           {playing ? 'Pausar música' : 'Tocar música'}
         </button>
         <audio ref={audioRef} src="/romantic-song.mp3" loop />
