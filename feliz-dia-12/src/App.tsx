@@ -61,26 +61,26 @@ function App() {
     return (
       <div className='flex h-screen w-screen items-center justify-center bg-pink-50'>
 
-      <div className="flex flex-col items-center justify-center p-4">
-        <h2 className="text-2xl font-bold text-pink-600 mb-4">Acesso restrito</h2>
-        <input
-          type="password"
-          placeholder="Digite o código de acesso"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          className="border border-pink-300 rounded px-4 py-2 mb-4"
+        <div className="flex flex-col items-center justify-center p-4">
+          <h2 className="text-2xl font-bold text-pink-600 mb-4">Acesso restrito</h2>
+          <input
+            type="password"
+            placeholder="Digite o código de acesso"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="border border-pink-300 rounded px-4 py-2 mb-4"
           />
-        <button
-          onClick={() => setAuthorized(code === correctCode)}
-          className="bg-pink-500 text-white px-4 py-2 rounded"
+          <button
+            onClick={() => setAuthorized(code === correctCode)}
+            className="bg-pink-500 text-white px-4 py-2 rounded"
           >
-          Entrar
-        </button>
-        {code && code !== correctCode && (
-          <p className="text-red-500 mt-2">Código incorreto 😢</p>
-        )}
-      </div>
+            Entrar
+          </button>
+          {code && code !== correctCode && (
+            <p className="text-red-500 mt-2">Código incorreto 😢</p>
+          )}
         </div>
+      </div>
     );
   }
 
@@ -96,28 +96,38 @@ function App() {
         cada momento ao seu lado é uma parte preciosa da minha história...
       </p>
 
-      <div className="text-center p-4">
-        <h1 className="text-2xl font-bold">Somente pra você 💖</h1>
-        <button
-          onClick={togglePlay}
-          className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
-          >
-          {playing ? 'Pausar música' : 'Tocar música'}
-        </button>
-        <audio ref={audioRef} src="music/romantic-song.mp3" loop />
-      </div>
-
-      <div className="w-full h-full">
-        <img
-          src={images[current]}
-          alt="slideshow"
-        />
-      </div>
-
       <span className="text-base sm:text-lg md:text-xl text-gray-800 max-w-xl">
         ...e eu mal posso esperar para viver todos os próximos capítulos, de mãos dadas, descobrindo novos caminhos,
         com o mesmo amor e carinho que sempre nos uniu. São <strong>{days}</strong> dias juntos 💖
       </span>
+      <span className="text-2xl font-bold sm:text-lg md:text-xl text-gray-800 max-w-xl">
+        Feliz mais um dia dos namorados!
+      </span>
+      <span className="text-2xl font-bold sm:text-lg md:text-xl text-gray-800 max-w-xl">
+        Amo você pra todo o sempre!
+      </span>
+      
+
+      <div className="text-center p-4 flex flex-col">
+        <span>Fiz pra você 💖</span>
+        <button
+          onClick={togglePlay}
+          className="mt-4 px-4 py-2 bg-pink-500 text-white rounded"
+        >
+          {playing ? 'Pausar' : 'Tocar'}
+        </button>
+        <audio ref={audioRef} src="music/romantic-song.mp3" loop />
+      </div>
+
+
+      <div className="w-full h-full">
+
+        {playing && <img
+          src={images[current]}
+          alt="slideshow"
+        />}
+      </div>
+
     </div>
   );
 }
